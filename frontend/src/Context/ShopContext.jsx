@@ -1,6 +1,6 @@
 // Import's
-import React, { createContext, useState } from "react";
-import all_product from "../Components/Assets/all_product.js"
+import React, { createContext, useEffect, useState } from "react";
+// import all_product from "../Components/Assets/all_product.js"
 
 // Creating Shop context here
 export const ShopContext = createContext(null);
@@ -8,7 +8,7 @@ export const ShopContext = createContext(null);
 // Function to get default cart product key value pairs like product id with added into cart
 const getDefaultCart = () => {
     let cart = {};
-    for (let index = 0; index < all_product.length + 1; index++) {
+    for (let index = 0; index < 300 + 1; index++) {
         cart[index] = 0;
     }
     return cart;
@@ -18,6 +18,13 @@ const getDefaultCart = () => {
 const ShopContextProvider = (props) => {
     // State's
     const [cartItems, setCartItems] = useState(getDefaultCart());
+    const [all_product, setAll_Product] = useState([]);
+
+    useEffect(() => {
+        fetch('http://localhost:4000/allproducts')
+            .then((response) => response.json())
+            .then((data) => setAll_Product(data))
+    }, []);
 
     // Function to add a item in a cart by it's id
     const addToCart = (itemId) => {
